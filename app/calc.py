@@ -22,5 +22,8 @@ def divide(a: float, b: float) -> float:
 
 
 def power(base: float, exp: int) -> float:
-    """底を指数乗した値を返す。"""
+    """底を指数乗した値を返す。
+
+    使用例: ``power(2.0, -2)`` は ``0.25`` を返す。
+    """
     return base**exp
