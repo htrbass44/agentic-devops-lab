@@ -1,6 +1,6 @@
 import pytest
 
-from app.calc import add, divide, multiply, subtract
+from app.calc import add, divide, multiply, power, subtract
 
 
 def test_add():
@@ -34,3 +34,24 @@ def test_divide_by_zero(divisor: float) -> None:
     """ゼロ除算では指定された例外を送出する。"""
     with pytest.raises(ValueError, match="^division by zero$"):
         divide(1.0, divisor)
+
+
+@pytest.mark.parametrize(
+    ("base", "exp", "expected"),
+    [(2.0, 3, 8.0), (-2.0, 3, -8.0), (2.0, 0, 1.0), (2.0, -2, 0.25)],
+)
+def test_power(base: float, exp: int, expected: float) -> None:
+    """べき乗の結果を確認する。"""
+    assert power(base, exp) == expected
+
+
+def test_power_invalid_exponent() -> None:
+    """整数でない指数では型エラーになる。"""
+    with pytest.raises(TypeError):
+        power(2.0, None)
+
+
+def test_power_zero_to_negative_exponent() -> None:
+    """ゼロの負のべき乗ではゼロ除算エラーになる。"""
+    with pytest.raises(ZeroDivisionError):
+        power(0.0, -1)
