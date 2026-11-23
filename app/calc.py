@@ -19,3 +19,8 @@ def divide(a: float, b: float) -> float:
     if b == 0:
         raise ValueError("division by zero")
     return a / b
+
+
+def power(base: float, exp: int) -> float:
+    """底を指数乗した値を返す。"""
+    return base**exp
