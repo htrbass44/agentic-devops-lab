@@ -1,5 +1,7 @@
 """シンプルな電卓モジュール"""
 
+import math
+
 
 def add(a: float, b: float) -> float:
     return a + b
@@ -27,3 +29,8 @@ def power(base: float, exp: int) -> float:
     使用例: ``power(2.0, -2)`` は ``0.25`` を返す。
     """
     return base**exp
+
+
+def sqrt(value: float) -> float:
+    """数値の平方根を返す。"""
+    return math.sqrt(value)
