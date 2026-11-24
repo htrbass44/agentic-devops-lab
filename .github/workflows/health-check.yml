@@ -1,0 +1,38 @@
+name: Health Check
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 1"   # 毎週月曜 09:00 JST
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: hc
+        run: |
+          set +e
+          PYTHONPATH=. python scripts/health_check.py > result.txt
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+      - name: Create issue on failure
+        if: steps.hc.outputs.exit != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "## 自動検出された問題"
+            echo '```'
+            cat result.txt
+            echo '```'
+            echo "## 完了条件"
+            echo "- [ ] scripts/health_check.py が OK を出力する"
+            echo "- [ ] テストが追加され pytest が成功する"
+          } > body.md
+          gh issue create --title "[health-check] 異常を検出しました" --body-file body.md
