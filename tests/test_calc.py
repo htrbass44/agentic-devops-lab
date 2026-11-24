@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 import pytest
 
-from app.calc import add, divide, multiply, power, subtract
+from app.calc import add, divide, multiply, power, sqrt, subtract
 
 
 @pytest.mark.parametrize(
@@ -115,3 +115,18 @@ def test_power_zero_to_negative_exponent() -> None:
     """ゼロの負のべき乗ではゼロ除算エラーになる。"""
     with pytest.raises(ZeroDivisionError):
         power(0.0, -1)
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [(9.0, 3.0), (0.0, 0.0), (2.25, 1.5)],
+)
+def test_sqrt(value: float, expected: float) -> None:
+    """平方根の結果を確認する。"""
+    assert sqrt(value) == expected
+
+
+def test_sqrt_negative_value() -> None:
+    """負数の平方根では値エラーになる。"""
+    with pytest.raises(ValueError):
+        sqrt(-1.0)
